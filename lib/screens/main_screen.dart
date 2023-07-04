@@ -1,8 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:organic_inorganic_detection/models/result_model.dart';
 import 'package:organic_inorganic_detection/screens/about_screen.dart';
 import 'package:organic_inorganic_detection/screens/home_screen.dart';
+import 'package:organic_inorganic_detection/screens/result_screen.dart';
+import 'package:organic_inorganic_detection/screens/widget/full_button.dart';
 import 'package:organic_inorganic_detection/utils/colors.dart';
+import 'package:tflite/tflite.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -12,12 +17,72 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  @override
+  void initState() {
+    loadModel();
+    super.initState();
+  }
+
+  Future loadModel() async {
+    Tflite.close();
+    String res;
+    res = (await Tflite.loadModel(
+      model: "assets/klasifikasi_model.tflite",
+      labels: "assets/labels.txt",
+    ))!;
+    print(res);
+  }
+
   List<Widget> screens = [
     const HomeScreen(),
     const AboutScreen(),
   ];
 
   int index = 0;
+
+  void showAlertDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        final size = MediaQuery.of(context).size;
+        return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          backgroundColor: Colors.white,
+          content: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Column(
+              // crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                FullButton(
+                  marginTop: 5,
+                  marginBottom: 0,
+                  width: size.width * 0.58,
+                  height: 40,
+                  onPressed: () {
+                    logicButtonPickImage(isCamera: true);
+                  },
+                  text: "Scan with Camera",
+                ),
+                FullButton(
+                  marginTop: 10,
+                  marginBottom: 0,
+                  width: size.width * 0.58,
+                  height: 40,
+                  secondaryColor: true,
+                  onPressed: () {
+                    logicButtonPickImage(isCamera: false);
+                  },
+                  text: "Scan with Gallery",
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +92,18 @@ class _MainScreenState extends State<MainScreen> {
         backgroundColor: MyColors.primary,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(32))),
-        onPressed: () {},
+        onPressed: () {
+          showAlertDialog();
+        },
         child: const Icon(
-          CupertinoIcons.photo_fill_on_rectangle_fill,
+          size: 40,
+          CupertinoIcons.camera_viewfinder,
           color: Colors.white,
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
-        // surfaceTintColor: const Color(0xFFFFFFFF),
         notchMargin: 10.0,
         child: SizedBox(
           height: 80,
@@ -105,32 +172,54 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                 ],
               ),
-              // Column(
-              //   children: [
-              //     IconButton(
-              //       color: Colors.grey,
-              //       icon: const Icon(Icons.home),
-              //       iconSize: 32,
-              //       onPressed: () {},
-              //     ),
-              //     const Text("Home")
-              //   ],
-              // ),
-              // Column(
-              //   children: [
-              //     IconButton(
-              //       color: Colors.red,
-              //       icon: const Icon(Icons.person),
-              //       iconSize: 32,
-              //       onPressed: () {},
-              //     ),
-              //     const Text("Info")
-              //   ],
-              // ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Future<void> logicButtonPickImage({required bool isCamera}) async {
+    final picker = ImagePicker();
+
+    String path = '';
+
+    try {
+      final getImage = await picker.pickImage(
+          source: isCamera ? ImageSource.camera : ImageSource.gallery);
+      if (getImage != null) {
+        path = getImage.path;
+      } else {
+        path = '';
+      }
+    } catch (e) {
+      e.toString();
+    }
+    if (path != '') {
+      ResultModel result = await imageClassification(path);
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => ResultScreen(
+            result: result,
+          ),
+        ),
+      );
+    }
+  }
+
+  Future<ResultModel> imageClassification(String path) async {
+    List recognitions;
+    recognitions = (await Tflite.runModelOnImage(
+        path: path, // required
+        imageMean: 0.0, // defaults to 117.0
+        imageStd: 224.0, // defaults to 1.0
+        numResults: 2, // defaults to 5
+        threshold: 0.2, // defaults to 0.1
+        asynch: true // defaults to true
+        ))!;
+    ResultModel result = ResultModel(
+        label: recognitions[0]['label'],
+        confidence: recognitions[0]['confidence']);
+    return result;
   }
 }

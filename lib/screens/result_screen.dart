@@ -1,5 +1,5 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-
 import 'package:organic_inorganic_detection/models/result_model.dart';
 import 'package:organic_inorganic_detection/utils/colors.dart';
 
@@ -44,17 +44,17 @@ class ResultScreen extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            Container(
-              clipBehavior: Clip.antiAliasWithSaveLayer,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              height: size.height - 450,
-              // width: size.width - 80,
-              child: Image.asset(
-                path,
-                fit: BoxFit.cover,
-              ),
+            Center(
+              child: Container(
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  height: size.height - 450,
+                  child: Image.file(
+                    File(path),
+                    fit: BoxFit.cover,
+                  )),
             ),
             const SizedBox(
               height: 10,

@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.organic_inorganic_detection">
    <application
-        android:label="organic_inorganic_detection"
+        android:label="Waste Classification"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

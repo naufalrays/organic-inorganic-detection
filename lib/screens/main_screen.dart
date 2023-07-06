@@ -46,38 +46,51 @@ class _MainScreenState extends State<MainScreen> {
       builder: (context) {
         final size = MediaQuery.of(context).size;
         return AlertDialog(
+          titlePadding: const EdgeInsets.only(left: 10, top: 10),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
           backgroundColor: Colors.white,
-          content: Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: Column(
-              // crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                FullButton(
-                  marginTop: 5,
-                  marginBottom: 0,
-                  width: size.width * 0.58,
-                  height: 40,
-                  onPressed: () {
-                    logicButtonPickImage(isCamera: true);
-                  },
-                  text: "Scan with Camera",
-                ),
-                FullButton(
-                  marginTop: 10,
-                  marginBottom: 0,
-                  width: size.width * 0.58,
-                  height: 40,
-                  secondaryColor: true,
-                  onPressed: () {
-                    logicButtonPickImage(isCamera: false);
-                  },
-                  text: "Scan with Gallery",
-                ),
-              ],
+          title: Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: InkWell(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onTap: () => Navigator.pop(context),
+              child: const Icon(Icons.close),
             ),
+          ),
+          titleTextStyle: const TextStyle(
+            fontSize: 16,
+            color: Colors.black,
+            overflow: TextOverflow.ellipsis,
+          ),
+          contentPadding: const EdgeInsets.only(top: 0, bottom: 20),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text("Ambil Gambar Dengan: "),
+              FullButton(
+                marginTop: 5,
+                marginBottom: 0,
+                width: size.width * 0.58,
+                height: 40,
+                onPressed: () {
+                  logicButtonPickImage(isCamera: true);
+                },
+                text: "Kamera",
+              ),
+              FullButton(
+                marginTop: 10,
+                marginBottom: 0,
+                width: size.width * 0.58,
+                height: 40,
+                secondaryColor: true,
+                onPressed: () {
+                  logicButtonPickImage(isCamera: false);
+                },
+                text: "Galeri",
+              ),
+            ],
           ),
         );
       },
@@ -114,11 +127,9 @@ class _MainScreenState extends State<MainScreen> {
                 children: [
                   MaterialButton(
                     splashColor: Colors.transparent,
-                    // highlightColor: Colors.transparent,
-                    // hoverColor: Colors.transparent,
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(
-                        Radius.circular(16),
+                        Radius.circular(8),
                       ),
                     ),
                     minWidth: 40,
@@ -135,7 +146,7 @@ class _MainScreenState extends State<MainScreen> {
                           color: index == 0 ? MyColors.primary : Colors.black,
                         ),
                         Text(
-                          "Home",
+                          "Beranda",
                           style: TextStyle(
                             color: index == 0 ? MyColors.primary : Colors.black,
                           ),
@@ -148,6 +159,12 @@ class _MainScreenState extends State<MainScreen> {
               Row(
                 children: [
                   MaterialButton(
+                    splashColor: Colors.transparent,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8),
+                      ),
+                    ),
                     minWidth: 40,
                     onPressed: () {
                       setState(() {
@@ -201,6 +218,7 @@ class _MainScreenState extends State<MainScreen> {
         MaterialPageRoute(
           builder: (context) => ResultScreen(
             result: result,
+            path: path,
           ),
         ),
       );

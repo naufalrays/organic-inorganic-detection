@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:organic_inorganic_detection/screens/information_screen.dart';
 import 'package:organic_inorganic_detection/utils/colors.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -6,11 +7,11 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
+      backgroundColor: MyColors.backgroundColor,
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
+        backgroundColor: MyColors.backgroundColor,
         elevation: 1,
         title: const Text(
           "Deteksi Organik",
@@ -180,43 +181,54 @@ class HomeScreen extends StatelessWidget {
               height: 10,
             ),
             Card(
+              color: MyColors.secondary,
               clipBehavior: Clip.antiAliasWithSaveLayer,
-              child: SizedBox(
-                height: 100,
-                child: Row(
-                  children: [
-                    Container(
-                      // clipBehavior: Clip.antiAliasWithSaveLayer,
-                      height: 100,
-                      width: 100,
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          fit: BoxFit.fitHeight,
-                          image: AssetImage("assets/images/sampah_organik.jpg"),
-                        ),
-                      ),
+              child: InkWell(
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const InformationScreen(
+                      isOrganic: true,
                     ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: const [
-                            Text(
-                              "Sampah Organik",
-                              style: TextStyle(fontWeight: FontWeight.w600),
-                            ),
-                            Text(
-                              "Sampah yang berasal dari sisa-sisa organisme makhluk hidup baik manusia, hewan, serta tumbuhan.",
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                            ),
-                          ],
+                  ),
+                ),
+                child: SizedBox(
+                  height: 100,
+                  child: Row(
+                    children: [
+                      Container(
+                        // clipBehavior: Clip.antiAliasWithSaveLayer,
+                        height: 100,
+                        width: 100,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            fit: BoxFit.fitHeight,
+                            image:
+                                AssetImage("assets/images/sampah_organik.jpg"),
+                          ),
                         ),
                       ),
-                    )
-                  ],
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: const [
+                              Text(
+                                "Sampah Organik",
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                              Text(
+                                "Sampah yang berasal dari sisa-sisa organisme makhluk hidup baik manusia, hewan, serta tumbuhan.",
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -224,44 +236,54 @@ class HomeScreen extends StatelessWidget {
               height: 8,
             ),
             Card(
+              color: MyColors.secondary,
               clipBehavior: Clip.antiAliasWithSaveLayer,
-              child: SizedBox(
-                height: 100,
-                child: Row(
-                  children: [
-                    Container(
-                      // clipBehavior: Clip.antiAliasWithSaveLayer,
-                      height: 100,
-                      width: 100,
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image:
-                              AssetImage("assets/images/sampah_anorganik.jpg"),
-                        ),
-                      ),
+              child: InkWell(
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const InformationScreen(
+                      isOrganic: false,
                     ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: const [
-                            Text(
-                              "Sampah Anorganik",
-                              style: TextStyle(fontWeight: FontWeight.w600),
-                            ),
-                            Text(
-                              "Sampah yang tidak dapat diuraikan oleh mikroorganisme di dalam tanah hingga menyebabkan proses penghancuran yang berlangsung sangat lama.",
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                            ),
-                          ],
+                  ),
+                ),
+                child: SizedBox(
+                  height: 100,
+                  child: Row(
+                    children: [
+                      Container(
+                        // clipBehavior: Clip.antiAliasWithSaveLayer,
+                        height: 100,
+                        width: 100,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: AssetImage(
+                                "assets/images/sampah_anorganik.jpg"),
+                          ),
                         ),
                       ),
-                    )
-                  ],
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: const [
+                              Text(
+                                "Sampah Anorganik",
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                              Text(
+                                "Sampah yang tidak dapat diuraikan oleh mikroorganisme di dalam tanah hingga menyebabkan proses penghancuran yang berlangsung sangat lama.",
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

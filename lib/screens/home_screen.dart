@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:organic_inorganic_detection/screens/information_screen.dart';
+import 'package:organic_inorganic_detection/screens/widget/pick_image_alert.dart';
 import 'package:organic_inorganic_detection/utils/colors.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -148,7 +149,7 @@ class HomeScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(16),
                               ),
                             ),
-                            onPressed: () {},
+                            onPressed: () => showAlertDialog(context),
                             child: const Text(
                               "Ambil Gambar",
                               style: TextStyle(color: Colors.white),
